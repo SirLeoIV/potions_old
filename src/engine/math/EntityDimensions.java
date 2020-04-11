@@ -1,8 +1,7 @@
-package math;
+package engine.math;
 
-import elements.Entity;
+import engine.elements.Entity;
 import javafx.geometry.Bounds;
-import javafx.scene.Node;
 
 public class EntityDimensions {
 

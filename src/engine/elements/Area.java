@@ -1,4 +1,4 @@
-package elements;
+package engine.elements;
 
 import javafx.animation.AnimationTimer;
 import javafx.scene.Node;
@@ -6,9 +6,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.paint.Paint;
-import math.EntityDimensions;
-import math.TwoPoints2D;
-import math.TwoVectors;
+import engine.math.EntityDimensions;
+import engine.math.TwoPoints2D;
+import engine.math.TwoVectors;
 
 import java.util.ArrayList;
 import java.util.List;

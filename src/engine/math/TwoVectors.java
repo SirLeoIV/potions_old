@@ -1,4 +1,4 @@
-package math;
+package engine.math;
 
 /*
 * This class represents the relationship between two 2D
@@ -177,7 +177,7 @@ public class TwoVectors {
                 // Record pivoting ratios below the diagonal
                 a[index[i]][j] = pj;
 
-                // Modify other elements accordingly
+                // Modify other engine.elements accordingly
                 for (int l=j+1; l<n; ++l)
                     a[index[i]][l] -= pj*a[index[j]][l];
             }

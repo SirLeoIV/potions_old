@@ -1,4 +1,4 @@
-package elements;
+package engine.elements;
 
 import javafx.animation.AnimationTimer;
 import javafx.scene.image.Image;
@@ -54,7 +54,7 @@ public class Entity extends ImageView {
         }
     }
 
-    /* Checks, when the elements.Entity is moving (towards) outside the valid area,
+    /* Checks, when the engine.elements.Entity is moving (towards) outside the valid area,
      if the next position in closer to the edge then the current one,
      so the entity is always moving towards the valid area */
     private boolean isMovementValid(double x, double y) {

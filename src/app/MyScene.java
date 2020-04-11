@@ -1,7 +1,7 @@
-package sample;
+package app;
 
-import elements.Area;
-import elements.Entity;
+import engine.elements.Area;
+import engine.elements.Entity;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.image.Image;
@@ -29,8 +29,8 @@ public class MyScene extends Area {
 
     private void initScene() {
         try {
-            imageLink = new Image( new FileInputStream("src/images/link.png"), 100, 100, true, false);
-            imageGanon = new Image( new FileInputStream("src/images/ganon.png"), 100, 100, true, false);
+            imageLink = new Image( new FileInputStream("src/resources/images/link.png"), 100, 100, true, false);
+            imageGanon = new Image( new FileInputStream("src/resources/images/ganon.png"), 100, 100, true, false);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

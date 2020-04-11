@@ -1,7 +1,7 @@
-package sample;
+package app;
 
-import math.Point2D;
-import math.TwoVectors;
+import engine.math.Point2D;
+import engine.math.TwoVectors;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;

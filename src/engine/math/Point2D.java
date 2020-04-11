@@ -1,4 +1,4 @@
-package math;
+package engine.math;
 
 public class Point2D {
 
