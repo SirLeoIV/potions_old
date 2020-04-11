@@ -1,5 +1,6 @@
 package engine.elements;
 
+import engine.enums.EntityOrientation;
 import javafx.animation.AnimationTimer;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -8,26 +9,37 @@ public abstract class Entity extends ImageView {
 
     String name;
 
+    boolean moving;
     boolean running;
     boolean moveUp;
     boolean moveDown;
     boolean moveRight;
     boolean moveLeft;
 
+    EntityOrientation orientation;
+
     public Entity(String name, Image image) {
         this.name = name;
         setImage(image);
+        moving = true;
 
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                int delta = 1;
-                if (running) delta *= 3;
+                changeOrientation();
+                if (moving) {
+                    int delta = 1;
+                    if (running) delta *= 3;
 
-                if (moveLeft)  moveBy(-delta, 0);
-                if (moveRight)  moveBy(delta, 0);
-                if (moveUp) moveBy(0, -delta);
-                if (moveDown) moveBy(0, delta);
+                    int x = 0;
+                    int y = 0;
+
+                    if (moveLeft)  x -= delta;
+                    if (moveRight)  x += delta;
+                    if (moveUp) y -= delta;
+                    if (moveDown) y += delta;
+                    moveBy(x, y);
+                }
             }
         };
         timer.start();
@@ -102,6 +114,20 @@ public abstract class Entity extends ImageView {
 
     void collide(Entity entity) {}
 
+    void changeOrientation() {
+        // standart-cases
+        if (moveUp && !moveDown && !moveLeft && !moveRight && (orientation != EntityOrientation.UP)) setOrientation(EntityOrientation.UP);
+        else if (!moveUp && moveDown && !moveLeft && !moveRight && (orientation != EntityOrientation.DOWN)) setOrientation(EntityOrientation.DOWN);
+        else if (!moveUp && !moveDown && moveLeft && !moveRight && (orientation != EntityOrientation.LEFT)) setOrientation(EntityOrientation.LEFT);
+        else if (!moveUp && !moveDown && !moveLeft && moveRight && (orientation != EntityOrientation.RIGHT)) setOrientation(EntityOrientation.RIGHT);
+
+        // special-cases
+        else if (moveUp && !moveDown && moveLeft && moveRight && (orientation != EntityOrientation.UP)) setOrientation(EntityOrientation.UP);
+        else if (!moveUp && moveDown && moveLeft && moveRight && (orientation != EntityOrientation.DOWN)) setOrientation(EntityOrientation.DOWN);
+        else if (moveUp && moveDown && moveLeft && !moveRight && (orientation != EntityOrientation.LEFT)) setOrientation(EntityOrientation.LEFT);
+        else if (moveUp && moveDown && !moveLeft && moveRight && (orientation != EntityOrientation.RIGHT)) setOrientation(EntityOrientation.RIGHT);
+    }
+
     public String getName() {
         return name;
     }
@@ -148,5 +174,22 @@ public abstract class Entity extends ImageView {
 
     public void setMoveLeft(boolean moveLeft) {
         this.moveLeft = moveLeft;
+    }
+
+    public boolean isMoving() {
+        return moving;
+    }
+
+    public void setMoving(boolean moving) {
+        this.moving = moving;
+    }
+
+    public EntityOrientation getOrientation() {
+        return orientation;
+    }
+
+    public void setOrientation(EntityOrientation orientation) {
+        System.out.println(orientation.name());
+        this.orientation = orientation;
     }
 }
