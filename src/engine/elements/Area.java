@@ -1,5 +1,6 @@
 package engine.elements;
 
+import engine.dto.Collision;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -7,13 +8,15 @@ import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.paint.Paint;
 import engine.math.EntityDimensions;
-import engine.math.TwoPoints2D;
+import engine.dto.TwoPoints2D;
 import engine.math.TwoVectors;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Area extends Scene {
+
+    ArrayList<Collision> collisions;
 
     public Area(Parent root) {
         super(root);
@@ -46,11 +49,12 @@ public abstract class Area extends Scene {
     }
 
     public void init() {
+        collisions = new ArrayList<>();
         keyEvents();
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
-
+                collisions.forEach(collision -> System.out.println(collision.getEntity1().name + " : " + collision.getEntity2().name));
                 checkLocations();
             }
         };
@@ -171,6 +175,7 @@ public abstract class Area extends Scene {
     public void keyEventZ(boolean input) {}
 
     private void checkLocations() {
+        ArrayList<Collision> updatedCollisions = new ArrayList<>();
         List<Node> nodes = getRoot().getChildrenUnmodifiable();
         ArrayList<Entity> entities = new ArrayList<>();
         for (Node node : nodes) {
@@ -186,10 +191,13 @@ public abstract class Area extends Scene {
                     for (TwoPoints2D twoPoints2 : dimensions2.points()) {
                         TwoVectors twoVectors = new TwoVectors(twoPoints1, twoPoints2);
                         boolean collision = twoVectors.calculateCollision();
-                        if (collision) System.out.println("TRUE");
+                        if (collision) {
+                            updatedCollisions.add(new Collision(entity1, entity2));
+                        }
                     }
                 }
             }
         }));
+        collisions = updatedCollisions;
     }
 }

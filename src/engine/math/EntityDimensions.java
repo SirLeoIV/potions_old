@@ -1,5 +1,7 @@
 package engine.math;
 
+import engine.dto.Point2D;
+import engine.dto.TwoPoints2D;
 import engine.elements.Entity;
 import javafx.geometry.Bounds;
 

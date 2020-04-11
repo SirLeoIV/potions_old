@@ -1,5 +1,8 @@
 package engine.math;
 
+import engine.dto.Point2D;
+import engine.dto.TwoPoints2D;
+
 /*
 * This class represents the relationship between two 2D
 * vectors in a coordinate system.
@@ -31,19 +34,19 @@ public class TwoVectors {
     }
 
     private void initVectors(Point2D a1, Point2D a2, Point2D b1, Point2D b2) {
-        Point2D orientationA = new Point2D((a2.x - a1.x), (a2.y - a1.y));
-        Point2D orientationB = new Point2D(-(b2.x - b1.x), -(b2.y - b1.y));
+        Point2D orientationA = new Point2D((a2.getX() - a1.getX()), (a2.getY() - a1.getY()));
+        Point2D orientationB = new Point2D(-(b2.getX() - b1.getX()), -(b2.getY() - b1.getY()));
 
-        this.a1 = orientationA.x;
-        this.b1 = orientationB.x;
-        d1 = b1.x - a1.x;
-        this.a2 = orientationA.y;
-        this.b2 = orientationB.y;
-        d2 = b1.y - a1.y;
+        this.a1 = orientationA.getX();
+        this.b1 = orientationB.getX();
+        d1 = b1.getX() - a1.getX();
+        this.a2 = orientationA.getY();
+        this.b2 = orientationB.getY();
+        d2 = b1.getY() - a1.getY();
     }
 
     public TwoVectors(TwoPoints2D a, TwoPoints2D b) {
-        initVectors(a.point1, a.point2, b.point1, b.point2);
+        initVectors(a.getPoint1(), a.getPoint2(), b.getPoint1(), b.getPoint2());
     }
 
     public TwoVectors() {

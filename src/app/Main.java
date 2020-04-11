@@ -1,6 +1,6 @@
 package app;
 
-import engine.math.Point2D;
+import engine.dto.Point2D;
 import engine.math.TwoVectors;
 import javafx.application.Application;
 import javafx.scene.Scene;
