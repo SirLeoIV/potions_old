@@ -4,7 +4,7 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public class Entity extends ImageView {
+public abstract class Entity extends ImageView {
 
     String name;
 
@@ -99,6 +99,8 @@ public class Entity extends ImageView {
 
         return result;
     }
+
+    void collide(Entity entity) {}
 
     public String getName() {
         return name;

@@ -3,8 +3,6 @@ package engine.elements;
 import javafx.animation.AnimationTimer;
 import javafx.scene.image.Image;
 
-import java.sql.Timestamp;
-
 public class Object extends Entity {
 
     int damage;

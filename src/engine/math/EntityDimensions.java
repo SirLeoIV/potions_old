@@ -1,7 +1,6 @@
 package engine.math;
 
 import engine.dto.Point2D;
-import engine.dto.TwoPoints2D;
 import engine.elements.Entity;
 import javafx.geometry.Bounds;
 
@@ -27,12 +26,21 @@ public class EntityDimensions {
         d = new Point2D(0, 1);
     }
 
-    public TwoPoints2D[] points() {
-        return new TwoPoints2D[]{
-                new TwoPoints2D(a, b),
-                new TwoPoints2D(b, c),
-                new TwoPoints2D(c, d),
-                new TwoPoints2D(d, a)
-        };
+    public Point2D[] points() {
+        return new Point2D[]{a, b, c, d};
+    }
+
+    public boolean calculateCollision(EntityDimensions entity) {
+        boolean collision = false;
+        for (Point2D point : points()) {
+            if (point.getX() > entity.a.getX()
+                    && point.getX() < entity.b.getX()
+                    && point.getY() > entity.a.getY()
+                    && point.getY() < entity.d.getY()) {
+                collision = true;
+                break;
+            }
+        }
+        return collision;
     }
 }

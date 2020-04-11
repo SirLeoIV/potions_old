@@ -2,9 +2,7 @@ package engine.elements;
 
 import javafx.animation.AnimationTimer;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 
 public class Creature extends Entity {
@@ -38,4 +36,13 @@ public class Creature extends Entity {
 
     }
 
+    @Override
+    void collide(Entity entity) {
+        if (entity instanceof Object) {
+            if (((Object) entity).damage > 0) {
+                health -= ((Object) entity).damage;
+                System.out.println(health);
+            }
+        }
+    }
 }

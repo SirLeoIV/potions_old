@@ -1,21 +1,21 @@
 package engine.elements;
 
 import engine.dto.Collision;
+import engine.math.EntityDimensions;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.paint.Paint;
-import engine.math.EntityDimensions;
-import engine.dto.TwoPoints2D;
-import engine.math.TwoVectors;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Area extends Scene {
 
+    ArrayList<Creature> creatures;
+    ArrayList<Object> objects;
     ArrayList<Collision> collisions;
 
     public Area(Parent root) {
@@ -49,16 +49,41 @@ public abstract class Area extends Scene {
     }
 
     public void init() {
+        creatures = getCreatures();
+        objects = getObjects();
         collisions = new ArrayList<>();
         keyEvents();
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                collisions.forEach(collision -> System.out.println(collision.getEntity1().name + " : " + collision.getEntity2().name));
+//                collisions.forEach(collision -> System.out.println(collision.getEntity1().name + " : " + collision.getEntity2().name));
                 checkLocations();
+                collisions.forEach(collision -> collision.getEntity1().collide(collision.getEntity2()));
             }
         };
         timer.start();
+    }
+
+    private ArrayList<Creature> getCreatures() {
+        ArrayList<Creature> creatures = new ArrayList<>();
+        List<Node> nodes = getRoot().getChildrenUnmodifiable();
+        for (Node node : nodes) {
+            if (node instanceof Creature) {
+                creatures.add((Creature) node);
+            }
+        }
+        return creatures;
+    }
+
+    private ArrayList<Object> getObjects() {
+        ArrayList<Object> objects = new ArrayList<>();
+        List<Node> nodes = getRoot().getChildrenUnmodifiable();
+        for (Node node : nodes) {
+            if (node instanceof Object) {
+                objects.add((Object) node);
+            }
+        }
+        return objects;
     }
 
     private void keyEvents() {
@@ -187,14 +212,9 @@ public abstract class Area extends Scene {
             if (entity1 != entity2) {
                 EntityDimensions dimensions1 = new EntityDimensions(entity1);
                 EntityDimensions dimensions2 = new EntityDimensions(entity2);
-                for (TwoPoints2D twoPoints1 : dimensions1.points()) {
-                    for (TwoPoints2D twoPoints2 : dimensions2.points()) {
-                        TwoVectors twoVectors = new TwoVectors(twoPoints1, twoPoints2);
-                        boolean collision = twoVectors.calculateCollision();
-                        if (collision) {
-                            updatedCollisions.add(new Collision(entity1, entity2));
-                        }
-                    }
+
+                if (dimensions1.calculateCollision(dimensions2) || dimensions2.calculateCollision(dimensions1)) {
+                    updatedCollisions.add(new Collision(entity1, entity2));
                 }
             }
         }));
