@@ -108,9 +108,6 @@ public class CreatureImages {
 
     public Image updateImage(CreatureState state, EntityOrientation orientation) {
         Image result = baseImage;
-        if (name.equals("wizard")) {
-            System.out.println(state.name() + " : " + orientation.name());
-        }
 
         if (state == CreatureState.WAITING) {
             if (orientation == EntityOrientation.LEFT) result = waiting_left;

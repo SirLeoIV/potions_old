@@ -38,7 +38,7 @@ public class MyScene extends Area {
 
     private void initScene() {
         try {
-            imageZauberer = new Image( new FileInputStream("src/resources/gifs/ZaubererIdle.gif"), 100, 100, false, false);
+            imageZauberer = new Image( new FileInputStream("src/resources/gifs/wizard/standing/wizard_standing_right.gif"), 100, 100, false, false);
             imageGanon = new Image( new FileInputStream("src/resources/images/ganon.png"), 100, 100, true, false);
             imageArrow = new Image( new FileInputStream("src/resources/images/arrow.png"), 50, 20, true, false);
         } catch (FileNotFoundException e) {
