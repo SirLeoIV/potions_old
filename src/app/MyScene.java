@@ -39,19 +39,13 @@ public class MyScene extends Area {
     private void initScene() {
         try {
             imageZauberer = new Image( new FileInputStream("src/resources/gifs/ZaubererIdle.gif"), 100, 100, false, false);
-            imageZaubererWaiting = new Image( new FileInputStream("src/resources/gifs/ZaubererTalking.gif"), 100, 100, false, false);
-            imageZaubererStanding = new Image( new FileInputStream("src/resources/gifs/ZaubererIdle.gif"), 100, 100, false, false);
-            imageZaubererGoing = new Image( new FileInputStream("src/resources/gifs/ZaubererWalking.gif"), 100, 100, false, false);
-            imageZaubererRunning = new Image( new FileInputStream("src/resources/gifs/ZaubererSprinting.gif"), 100, 100, false, false);
-            imageZaubererAttacking = new Image( new FileInputStream("src/resources/gifs/ZaubererDrinking.gif"), 100, 100, false, false);
             imageGanon = new Image( new FileInputStream("src/resources/images/ganon.png"), 100, 100, true, false);
             imageArrow = new Image( new FileInputStream("src/resources/images/arrow.png"), 50, 20, true, false);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         entityGroup = new Group();
-        hero = new Creature("Hero", imageZauberer, 100);
-        hero.setImages(imageZaubererWaiting, imageZaubererStanding, imageZaubererGoing, imageZaubererRunning, imageZaubererAttacking);
+        hero = new Creature("wizard", imageZauberer, 100);
 
         enemy = new Creature("Enemy", imageGanon, 100);
         arrow = new Object("Arrow", imageArrow, 2);
@@ -102,7 +96,7 @@ public class MyScene extends Area {
     public void keyEventA(boolean input) {
         hero.setMoving(!input);
         if (input) {
-            hero.setState(CreatureState.ATTACKING);
+            hero.setState(CreatureState.ACTION);
         } else {
             hero.setState(CreatureState.STANDING);
         }

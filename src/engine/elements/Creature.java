@@ -10,13 +10,8 @@ public class Creature extends Entity {
     long lastHealthUpdate;
     double healthUpdateCooldown;
 
-    Image imageWaiting;
-    Image imageStanding;
-    Image imageGoing;
-    Image imageRunning;
-    Image imageAttacking;
-
     CreatureState state;
+    CreatureImages images;
 
     public Creature(String name, Image image, int health) {
         super(name, image);
@@ -33,15 +28,18 @@ public class Creature extends Entity {
     }
 
     private void initCreature(Image image) {
-        setImages(image, image, image, image, image);
-        lastHealthUpdate = System.currentTimeMillis();
         state = CreatureState.STANDING;
+        images = new CreatureImages(name, 100, 100, image);
+        lastHealthUpdate = System.currentTimeMillis();
 
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
                 updateState();
-                updateImages();
+                if (images.getCurrentImageStateOrientation().getOrientation() != orientation
+                        || images.getCurrentImageStateOrientation().getState() != state) {
+                    updateImages();
+                }
             }
         };
         timer.start();
@@ -49,8 +47,10 @@ public class Creature extends Entity {
 
     private void updateState() {
         if (moving) {
-            if (moveRight || moveLeft || moveUp || moveDown) {
-                state = CreatureState.GOING;
+            if ((moveRight || moveLeft || moveUp || moveDown)
+                    && !(moveLeft && moveRight)
+                    && !(moveUp && moveDown)) {
+                state = CreatureState.WALKING;
                 if (running) {
                     state = CreatureState.RUNNING;
                 }
@@ -61,21 +61,7 @@ public class Creature extends Entity {
     }
 
     private void updateImages() {
-        if (state == CreatureState.WAITING) {
-            setImage(imageWaiting);
-        }
-        if (state == CreatureState.STANDING) {
-            setImage(imageStanding);
-        }
-        if (state == CreatureState. GOING) {
-            setImage(imageGoing);
-        }
-        if (state == CreatureState.RUNNING) {
-            setImage(imageRunning);
-        }
-        if (state == CreatureState.ATTACKING) {
-            setImage(imageAttacking);
-        }
+        setImage(images.updateImage(state, orientation));
     }
 
     @Override
@@ -97,19 +83,6 @@ public class Creature extends Entity {
             lastHealthUpdate = currentTime;
             System.out.println(health);
         }
-    }
-
-    public void setImages(
-        Image imageWaiting,
-        Image imageStanding,
-        Image imageGoing,
-        Image imageRunning,
-        Image imageAttacking) {
-        this.imageWaiting = imageWaiting;
-        this.imageStanding = imageStanding;
-        this.imageGoing = imageGoing;
-        this.imageRunning = imageRunning;
-        this.imageAttacking = imageAttacking;
     }
 
     public int getHealth() {

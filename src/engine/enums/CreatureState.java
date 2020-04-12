@@ -3,7 +3,7 @@ package engine.enums;
 public enum CreatureState {
     WAITING,
     STANDING,
-    GOING,
+    WALKING,
     RUNNING,
-    ATTACKING
+    ACTION
 }
