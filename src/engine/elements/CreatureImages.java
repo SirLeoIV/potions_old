@@ -9,7 +9,7 @@ import java.io.FileInputStream;
 
 public class CreatureImages {
 
-    final String standing = "standing";
+    final String standing = "idle";
     final String waiting = "waiting";
     final String walking = "walking";
     final String running = "running";
@@ -95,10 +95,10 @@ public class CreatureImages {
             return new Image(new FileInputStream(path), width, height, false, false);
         } catch (Exception e1) {
             try {
-                path = path.replace("waiting", "standing");
-                path = path.replace("walking", "standing");
-                path = path.replace("running", "standing");
-                path = path.replace("action", "standing");
+                path = path.replace("waiting", "idle");
+                path = path.replace("walking", "idle");
+                path = path.replace("running", "idle");
+                path = path.replace("action", "idle");
                 return new Image(new FileInputStream(path), width, height, false, false);
             } catch (Exception e2) {
                 return baseImage;

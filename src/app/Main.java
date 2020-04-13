@@ -10,9 +10,10 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Game");
 
-        Scene scene = new MyScene(500, 400);
+        Scene arena = new Arena(1000, 600);
 
-        primaryStage.setScene(scene);
+        primaryStage.setScene(arena);
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 

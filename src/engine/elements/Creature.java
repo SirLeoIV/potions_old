@@ -36,10 +36,7 @@ public class Creature extends Entity {
             @Override
             public void handle(long now) {
                 updateState();
-                if (images.getCurrentImageStateOrientation().getOrientation() != orientation
-                        || images.getCurrentImageStateOrientation().getState() != state) {
-                    updateImages();
-                }
+                updateImages();
             }
         };
         timer.start();
@@ -50,9 +47,10 @@ public class Creature extends Entity {
             if ((moveRight || moveLeft || moveUp || moveDown)
                     && !(moveLeft && moveRight)
                     && !(moveUp && moveDown)) {
-                state = CreatureState.WALKING;
                 if (running) {
                     state = CreatureState.RUNNING;
+                } else {
+                    state = CreatureState.WALKING;
                 }
             } else {
                 state = CreatureState.STANDING;
@@ -61,7 +59,11 @@ public class Creature extends Entity {
     }
 
     private void updateImages() {
-        setImage(images.updateImage(state, orientation));
+        // only if state or orientation has changed
+        if (images.getCurrentImageStateOrientation().getOrientation() != orientation
+                || images.getCurrentImageStateOrientation().getState() != state) {
+            setImage(images.updateImage(state, orientation));
+        }
     }
 
     @Override

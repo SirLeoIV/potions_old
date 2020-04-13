@@ -38,7 +38,10 @@ public abstract class Entity extends ImageView {
                     if (moveRight)  x += delta;
                     if (moveUp) y -= delta;
                     if (moveDown) y += delta;
-                    moveBy(x, y);
+
+                    // 2x to enable 'sliding' on the edge
+                    moveBy(x, 0);
+                    moveBy(0, y);
                 }
             }
         };
