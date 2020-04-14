@@ -22,6 +22,7 @@ public abstract class Entity extends ImageView {
         this.name = name;
         setImage(image);
         moving = true;
+        orientation = EntityOrientation.RIGHT;
 
         AnimationTimer timer = new AnimationTimer() {
             @Override

@@ -10,6 +10,10 @@ public class Creature extends Entity {
     long lastHealthUpdate;
     double healthUpdateCooldown;
 
+    boolean inAction;
+    long lastActionStart;
+    int actionDuration;
+
     CreatureState state;
     CreatureImages images;
 
@@ -35,15 +39,18 @@ public class Creature extends Entity {
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                updateState();
-                updateImages();
+                updateInAction();
+                if (!inAction) {
+                    updateState();
+                    updateImages();
+                }
             }
         };
         timer.start();
     }
 
     private void updateState() {
-        if (moving) {
+        if (moving && !inAction) {
             if ((moveRight || moveLeft || moveUp || moveDown)
                     && !(moveLeft && moveRight)
                     && !(moveUp && moveDown)) {
@@ -87,6 +94,29 @@ public class Creature extends Entity {
         }
     }
 
+    public void doAction(CreatureAction action) {
+        if (!inAction) {
+            setState(CreatureState.ACTION);
+            inAction = true;
+            lastActionStart = System.currentTimeMillis();
+            actionDuration = action.timeToExecute;
+            setMoving(false);
+            setImage(action.startAction(orientation));
+        }
+    }
+
+    void updateInAction() {
+        if (inAction) {
+            // if action is done, change image back to old one
+            if (!(lastActionStart + actionDuration > System.currentTimeMillis())) {
+                setMoving(true);
+                setState(CreatureState.STANDING);
+                setImage(images.updateImage(state, orientation));
+            }
+            inAction = lastActionStart + actionDuration > System.currentTimeMillis();
+        }
+    }
+
     public int getHealth() {
         return health;
     }
@@ -101,5 +131,29 @@ public class Creature extends Entity {
 
     public void setState(CreatureState state) {
         this.state = state;
+    }
+
+    public void moveLeft(boolean input) {
+        if (!inAction || !input) {
+            setMoveLeft(input);
+        }
+    }
+
+    public void moveRight(boolean input) {
+        if (!inAction || !input) {
+            setMoveRight(input);
+        }
+    }
+
+    public void moveUp(boolean input) {
+        if (!inAction || !input) {
+            setMoveUp(input);
+        }
+    }
+
+    public void moveDown(boolean input) {
+        if (!inAction || !input) {
+            setMoveDown(input);
+        }
     }
 }

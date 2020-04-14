@@ -15,7 +15,7 @@ import java.io.FileNotFoundException;
 
 public class Arena extends Area {
 
-    Creature hero;
+    Hero hero;
     Creature enemy;
     Object arrow;
     Image imageZauberer;
@@ -48,7 +48,7 @@ public class Arena extends Area {
 
         entityGroup = new Group();
 
-        hero = new Creature("Wizard", imageZauberer, 100);
+        hero = new Hero("Wizard", imageZauberer, 100);
         enemy = new Creature("Enemy", imageGanon, 100);
         arrow = new Object("Arrow", imageArrow, 2);
         backgroundNode = new ImageView(backgroundImage);
@@ -66,22 +66,22 @@ public class Arena extends Area {
 
     @Override
     public void keyEventUP(boolean input) {
-        hero.setMoveUp(input);
+        hero.moveUp(input);
     }
 
     @Override
     public void keyEventDOWN(boolean input) {
-        hero.setMoveDown(input);
+        hero.moveDown(input);
     }
 
     @Override
     public void keyEventLEFT(boolean input) {
-        hero.setMoveLeft(input);
+        hero.moveLeft(input);
     }
 
     @Override
     public void keyEventRIGHT(boolean input) {
-        hero.setMoveRight(input);
+        hero.moveRight(input);
     }
 
     @Override
@@ -101,11 +101,8 @@ public class Arena extends Area {
 
     @Override
     public void keyEventA(boolean input) {
-        hero.setMoving(!input);
         if (input) {
-            hero.setState(CreatureState.ACTION);
-        } else {
-            hero.setState(CreatureState.STANDING);
+            hero.drink();
         }
     }
 }
