@@ -37,10 +37,10 @@ public class Arena extends Area {
 
     private void initScene() {
         try {
-            imageZauberer = new Image( new FileInputStream("src/resources/gifs/wizard/idle/wizard_idle_right.gif"), 100, 100, false, false);
+            imageZauberer = new Image( new FileInputStream("src/resources/gifs/wizard/idle/WizardIdleRight.gif"), 100, 100, false, false);
             imageGanon = new Image( new FileInputStream("src/resources/images/ganon.png"), 100, 100, true, false);
             imageArrow = new Image( new FileInputStream("src/resources/images/arrow.png"), 50, 20, true, false);
-            backgroundImage = new Image( new FileInputStream("src/resources/images/arena.jpg"), 1000, 600, false, false);
+            backgroundImage = new Image( new FileInputStream("src/resources/images/arena.png"), 1000, 600, false, false);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -48,7 +48,7 @@ public class Arena extends Area {
 
         entityGroup = new Group();
 
-        hero = new Creature("wizard", imageZauberer, 100);
+        hero = new Creature("Wizard", imageZauberer, 100);
         enemy = new Creature("Enemy", imageGanon, 100);
         arrow = new Object("Arrow", imageArrow, 2);
         backgroundNode = new ImageView(backgroundImage);

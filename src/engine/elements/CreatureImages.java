@@ -9,16 +9,16 @@ import java.io.FileInputStream;
 
 public class CreatureImages {
 
-    final String standing = "idle";
-    final String waiting = "waiting";
-    final String walking = "walking";
-    final String running = "running";
-    final String action = "action";
+    final String standing = "Idle";
+    final String waiting = "Waiting";
+    final String walking = "Walking";
+    final String running = "Running";
+    final String action = "Action";
 
-    final String right = "_right";
-    final String left = "_left";
-    final String up = "_up";
-    final String down = "_down";
+    final String right = "Right";
+    final String left = "Left";
+    final String up = "Up";
+    final String down = "Down";
 
     final String gif = ".gif";
 
@@ -62,7 +62,7 @@ public class CreatureImages {
         currentImageStateOrientation = new CreatureImageStateOrientation(baseImage, CreatureState.STANDING, EntityOrientation.RIGHT);
 
         String path = "src/resources/gifs/" + name + "/";
-        String namePrefix = "/" + name + "_";
+        String namePrefix = "/" + name;
 
         waiting_right = getImage(path + waiting + namePrefix + waiting + right + gif);
         waiting_left = getImage(path + waiting + namePrefix + waiting + left + gif);
@@ -95,10 +95,10 @@ public class CreatureImages {
             return new Image(new FileInputStream(path), width, height, false, false);
         } catch (Exception e1) {
             try {
-                path = path.replace("waiting", "idle");
-                path = path.replace("walking", "idle");
-                path = path.replace("running", "idle");
-                path = path.replace("action", "idle");
+                path = path.replace(waiting, standing);
+                path = path.replace(walking, standing);
+                path = path.replace(running, standing);
+                path = path.replace(action, standing);
                 return new Image(new FileInputStream(path), width, height, false, false);
             } catch (Exception e2) {
                 return baseImage;
