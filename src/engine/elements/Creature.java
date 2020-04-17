@@ -52,8 +52,8 @@ public class Creature extends Entity {
     private void updateState() {
         if (moving && !inAction) {
             if ((moveRight || moveLeft || moveUp || moveDown)
-                    && !(moveLeft && moveRight)
-                    && !(moveUp && moveDown)) {
+                    && !(moveLeft && moveRight && !moveUp && !moveDown)
+                    && !(moveUp && moveDown && !moveRight && !moveLeft)) {
                 if (running) {
                     state = CreatureState.RUNNING;
                 } else {
