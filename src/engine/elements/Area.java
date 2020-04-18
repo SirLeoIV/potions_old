@@ -1,12 +1,10 @@
 package engine.elements;
 
 import engine.dto.Collision;
+import engine.dto.ObjectStarter;
 import engine.math.EntityDimensions;
 import javafx.animation.AnimationTimer;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.SceneAntialiasing;
+import javafx.scene.*;
 import javafx.scene.paint.Paint;
 
 import java.util.ArrayList;
@@ -17,6 +15,8 @@ public abstract class Area extends Scene {
     ArrayList<Creature> creatures;
     ArrayList<Object> objects;
     ArrayList<Collision> collisions;
+    public Group entityGroup;
+
 
     public Area(Parent root) {
         super(root);
@@ -49,6 +49,7 @@ public abstract class Area extends Scene {
     }
 
     public void init() {
+        entityGroup = new Group();
         creatures = getCreatures();
         objects = getObjects();
         collisions = new ArrayList<>();
@@ -59,6 +60,8 @@ public abstract class Area extends Scene {
 //                collisions.forEach(collision -> System.out.println(collision.getEntity1().name + " : " + collision.getEntity2().name));
                 checkLocations();
                 collisions.forEach(collision -> collision.getEntity1().collide(collision.getEntity2()));
+                objects = getObjects();
+                deleteObjects();
             }
         };
         timer.start();
@@ -219,5 +222,21 @@ public abstract class Area extends Scene {
             }
         }));
         collisions = updatedCollisions;
+    }
+
+    public void createObject(ObjectStarter starter) {
+        Object object = new Object(starter.getObject());
+        entityGroup.getChildren().add(object);
+        object.relocate(starter.getStartingX(), starter.getStartingY());
+        object.startMoving(starter.getOrientation());
+    }
+
+    void deleteObjects() {
+        objects.forEach(object ->  {
+            if (object.birthTime + object.lifeTime < System.currentTimeMillis() && object.birthTime > 0) {
+                System.out.println("Remove: " + object.name);
+                entityGroup.getChildren().remove(object);
+            }
+        });
     }
 }

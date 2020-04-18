@@ -6,6 +6,7 @@ import javafx.scene.image.Image;
 
 public class Hero extends Creature {
 
+    // actions:
     CreatureAction drinking;
 
     public Hero(String name, Image image, int health) {

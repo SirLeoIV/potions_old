@@ -9,12 +9,12 @@ public abstract class Entity extends ImageView {
 
     String name;
 
-    boolean moving;
-    boolean running;
-    boolean moveUp;
-    boolean moveDown;
-    boolean moveRight;
-    boolean moveLeft;
+    public boolean moving;
+    public boolean running;
+    public boolean moveUp;
+    public boolean moveDown;
+    public boolean moveRight;
+    public boolean moveLeft;
 
     EntityOrientation orientation;
 
@@ -49,7 +49,7 @@ public abstract class Entity extends ImageView {
         timer.start();
     }
 
-    private void moveBy(int dx, int dy) {
+    public void moveBy(int dx, int dy) {
         if (dx == 0 && dy == 0) return;
 
         final double cx = getBoundsInLocal().getWidth()  / 2;
