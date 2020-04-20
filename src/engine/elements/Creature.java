@@ -1,10 +1,12 @@
 package engine.elements;
 
+import app.Arena;
 import engine.dto.ObjectStarter;
 import engine.enums.CreatureState;
 import engine.enums.EntityOrientation;
 import engine.enums.ObjectOrientation;
 import javafx.animation.AnimationTimer;
+import javafx.scene.Scene;
 import javafx.scene.image.Image;
 
 import java.io.FileInputStream;
@@ -22,6 +24,7 @@ public class Creature extends Entity {
 
     // shooting stuff:
     Image imageBall;
+    boolean shooting;
     public long lastShot;
     public int shootingCooldown;
 
@@ -62,6 +65,7 @@ public class Creature extends Entity {
                 if (!inAction) {
                     updateState();
                     updateImages();
+                    if (shooting && lastShot + shootingCooldown < System.currentTimeMillis()) shoot();
                 }
             }
         };
@@ -136,7 +140,7 @@ public class Creature extends Entity {
         }
     }
 
-    public ObjectStarter shoot() {
+    public void shoot() {
         lastShot = System.currentTimeMillis();
 
         int startingX = (int) (getBoundsInParent().getMinX() + getBoundsInParent().getMaxX()) / 2;
@@ -169,7 +173,13 @@ public class Creature extends Entity {
         }
 
         Object object = new Object(new Object("Ball", imageBall, 2, 3, 1000));
-        return new ObjectStarter(object, startingX, startingY, orientation);
+        createObjectInArena(new ObjectStarter(object, startingX, startingY, orientation));
+    }
+
+    void createObjectInArena(ObjectStarter starter) {
+        Scene scene = getParent().getScene();
+        Arena arena = (Arena) scene;
+        arena.createObject(starter);
     }
 
     public int getHealth() {
@@ -210,5 +220,13 @@ public class Creature extends Entity {
         if (!inAction || !input) {
             setMoveDown(input);
         }
+    }
+
+    public boolean isShooting() {
+        return shooting;
+    }
+
+    public void setShooting(boolean shooting) {
+        this.shooting = shooting;
     }
 }

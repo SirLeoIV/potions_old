@@ -110,8 +110,6 @@ public class Arena extends Area {
 
     @Override
     public void keyEventENTER(boolean input) {
-        if (input && hero.lastShot + hero.shootingCooldown < System.currentTimeMillis()) {
-            createObject(hero.shoot());
-        }
+        hero.setShooting(input);
     }
 }
