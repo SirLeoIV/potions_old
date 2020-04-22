@@ -1,37 +1,40 @@
 package engine.elements;
 
+import engine.enums.AttackingTarget;
 import engine.enums.ObjectOrientation;
 import javafx.animation.AnimationTimer;
 import javafx.scene.image.Image;
 
 public class Object extends Entity {
 
-    int damage;
+    public int damage;
     int speed;
     long birthTime;
     int lifeTime;
+    public AttackingTarget target;
 
     public Object(Object object) {
         super(object.name, object.getImage());
         damage = object.damage;
         speed = object.speed;
         lifeTime = object.lifeTime;
+        target = object.target;
 
         initObject();
     }
 
-    public Object(String name, Image image, int damage, int speed, int lifeTime) {
+    public Object(String name, Image image, int damage, int speed, int lifeTime, AttackingTarget target) {
         super(name, image);
         this.damage = damage;
         this.speed = speed;
         this.lifeTime = lifeTime;
+        this.target = target;
 
         initObject();
     }
 
     private void initObject() {
         birthTime = System.currentTimeMillis();
-        System.out.println(birthTime);
     }
 
     public void startMoving(ObjectOrientation orientation) {

@@ -1,9 +1,12 @@
 package engine.elements;
 
+import engine.dto.Event;
 import engine.enums.EntityOrientation;
 import javafx.animation.AnimationTimer;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+
+import java.util.ArrayList;
 
 public abstract class Entity extends ImageView {
 
@@ -116,7 +119,7 @@ public abstract class Entity extends ImageView {
         return result;
     }
 
-    void collide(Entity entity) {}
+    public void collide(Entity entity) {}
 
     void changeOrientation() {
         // standart-cases
@@ -131,6 +134,8 @@ public abstract class Entity extends ImageView {
         else if (moveUp && moveDown && moveLeft && !moveRight && (orientation != EntityOrientation.LEFT)) setOrientation(EntityOrientation.LEFT);
         else if (moveUp && moveDown && !moveLeft && moveRight && (orientation != EntityOrientation.RIGHT)) setOrientation(EntityOrientation.RIGHT);
     }
+
+    public void handleEvents(ArrayList<Event> events) {};
 
     public String getName() {
         return name;

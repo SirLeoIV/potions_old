@@ -4,6 +4,8 @@ import engine.dto.ObjectStarter;
 import engine.elements.Area;
 import engine.elements.Creature;
 import engine.elements.Object;
+import engine.elements.styleElements.ProgressElement;
+import engine.enums.AttackingTarget;
 import engine.enums.CreatureState;
 import engine.enums.ObjectOrientation;
 import javafx.scene.Parent;
@@ -16,15 +18,25 @@ import java.io.FileNotFoundException;
 public class Arena extends Area {
 
     Hero hero;
-    Creature enemy;
-    ObjectStarter arrow;
-    ObjectStarter ball;
     Image imageZauberer;
+
+    Creature enemy;
     Image imageGanon;
+
+    ObjectStarter arrow;
     Image imageArrow;
+
+    ObjectStarter ball;
     Image imageBall;
+
     ImageView backgroundNode;
     Image backgroundImage;
+
+    ProgressElement healthBar;
+    Image healthImage;
+
+    ProgressElement manaBar;
+    Image manaImage;
 
     public Arena() {
         super(new Parent() {});
@@ -43,20 +55,26 @@ public class Arena extends Area {
             imageArrow = new Image( new FileInputStream("src/resources/images/arrow.png"), 50, 20, true, false);
             imageBall = new Image( new FileInputStream("src/resources/images/ball.jpg"), 50, 20, true, false);
             backgroundImage = new Image( new FileInputStream("src/resources/images/arena.png"), 1000, 600, false, false);
+            healthImage = new Image( new FileInputStream("src/resources/images/HealthFlask/HealthFlask10.png"), 100, 100, false, false);
+            manaImage = new Image( new FileInputStream("src/resources/images/ManaFlask/ManaFlask10.png"), 100, 100, false, false);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
-        hero = new Hero("Wizard", imageZauberer, 100);
-        enemy = new Creature("Enemy", imageGanon, 100);
+        healthBar = new ProgressElement("HealthFlask", healthImage, 20, 480, 100, 100, true, 11);
+        manaBar = new ProgressElement("ManaFlask", manaImage, 100, 480, 100, 100, true, 11);
+        hero = new Hero("Wizard", imageZauberer, 10);
+        enemy = new Enemy("Enemy", imageGanon, 10);
         backgroundNode = new ImageView(backgroundImage);
 
         // ObjectStarter:
-        arrow = new ObjectStarter(new Object("Arrow", imageArrow, 2, 2, 2000), 100, 100, ObjectOrientation.RIGHT);
-        ball = new ObjectStarter(new Object("Ball", imageBall, 2, 2, 2000), 200, 200, ObjectOrientation.RIGHT);
+        arrow = new ObjectStarter(new Object("Arrow", imageArrow, 1, 2, 2000, AttackingTarget.HERO), 100, 100, ObjectOrientation.RIGHT);
+        ball = new ObjectStarter(new Object("Ball", imageBall, 1, 2, 2000, AttackingTarget.ENEMY), 200, 200, ObjectOrientation.RIGHT);
 
         entityGroup.getChildren().add(hero);
         entityGroup.getChildren().add(enemy);
+        entityGroup.getChildren().add(healthBar);
+        entityGroup.getChildren().add(manaBar);
         entityGroup.getChildren().add(backgroundNode);
         backgroundNode.toBack();
         setRoot(entityGroup);
@@ -105,6 +123,42 @@ public class Arena extends Area {
     public void keyEventE(boolean input) {
         if (input) {
             hero.drink();
+        }
+    }
+
+    @Override
+    public void keyEventI(boolean input) {
+        if (input) {
+            healthBar.increase();
+        }
+    }
+
+    @Override
+    public void keyEventU(boolean input) {
+        if (input) {
+            healthBar.decrease();
+        }
+    }
+
+
+    @Override
+    public void keyEventK(boolean input) {
+        if (input) {
+            manaBar.increase();
+        }
+    }
+
+    @Override
+    public void keyEventJ(boolean input) {
+        if (input) {
+            manaBar.decrease();
+        }
+    }
+
+    @Override
+    public void keyEventM(boolean input) {
+        if (input) {
+            events.forEach(System.out::println);
         }
     }
 

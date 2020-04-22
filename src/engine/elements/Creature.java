@@ -1,10 +1,10 @@
 package engine.elements;
 
 import app.Arena;
+import app.Hero;
+import engine.dto.Event;
 import engine.dto.ObjectStarter;
-import engine.enums.CreatureState;
-import engine.enums.EntityOrientation;
-import engine.enums.ObjectOrientation;
+import engine.enums.*;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -12,7 +12,7 @@ import javafx.scene.image.Image;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-public class Creature extends Entity {
+public abstract class Creature extends Entity {
 
     int health;
     long lastHealthUpdate;
@@ -65,7 +65,7 @@ public class Creature extends Entity {
                 if (!inAction) {
                     updateState();
                     updateImages();
-                    if (shooting && lastShot + shootingCooldown < System.currentTimeMillis()) shoot();
+                    if (shooting) shoot();
                 }
             }
         };
@@ -96,16 +96,7 @@ public class Creature extends Entity {
         }
     }
 
-    @Override
-    void collide(Entity entity) {
-        if (entity instanceof Object) {
-            if (((Object) entity).damage > 0) {
-                editHealth(-((Object) entity).damage);
-            }
-        }
-    }
-
-    private void editHealth(double delta) {
+    public void editHealth(double delta) {
 
         long lastUpdatePlusCooldown = lastHealthUpdate + (int) healthUpdateCooldown * 1000;
         long currentTime = System.currentTimeMillis();
@@ -114,7 +105,14 @@ public class Creature extends Entity {
             health += delta;
             lastHealthUpdate = currentTime;
             System.out.println(health);
+            addEvent(new Event(EventType.HEALTH, "", getHealth()));
         }
+    }
+
+    public void addEvent(Event event) {
+        Scene scene = getParent().getScene();
+        Area area = (Area) scene;
+        area.events.add(event);
     }
 
     public void doAction(CreatureAction action) {
@@ -141,6 +139,7 @@ public class Creature extends Entity {
     }
 
     public void shoot() {
+        if (lastShot + shootingCooldown > System.currentTimeMillis()) return;
         lastShot = System.currentTimeMillis();
 
         int startingX = (int) (getBoundsInParent().getMinX() + getBoundsInParent().getMaxX()) / 2;
@@ -164,15 +163,23 @@ public class Creature extends Entity {
         else if (moveRight && !moveLeft && moveUp && moveDown) orientation = ObjectOrientation.RIGHT;
         else if (!moveRight && moveLeft && moveUp && moveDown) orientation = ObjectOrientation.LEFT;
 
-        // all keys are pressed -> the orientation of the Creature is used
-        else if ((moveRight && moveLeft && moveUp && moveDown) || (!moveRight && !moveLeft && !moveUp && !moveDown)) {
+        // else -> the orientation of the Creature is used
+        else {
             if (getOrientation() == EntityOrientation.RIGHT) orientation = ObjectOrientation.RIGHT;
             else if (getOrientation() == EntityOrientation.LEFT) orientation = ObjectOrientation.LEFT;
             else if (getOrientation() == EntityOrientation.UP) orientation = ObjectOrientation.UP;
             else if (getOrientation() == EntityOrientation.DOWN) orientation = ObjectOrientation.DOWN;
         }
 
-        Object object = new Object(new Object("Ball", imageBall, 2, 3, 1000));
+        AttackingTarget target = AttackingTarget.HERO;
+        if (this instanceof Hero) {
+            target = AttackingTarget.ENEMY;
+        }
+
+        System.out.println(target.name());
+        Object object = new Object("Ball", imageBall, 1, 3, 1000, target);
+        startingX -= object.getBoundsInLocal().getWidth() / 2;
+        startingY -= object.getBoundsInLocal().getHeight() / 2;
         createObjectInArena(new ObjectStarter(object, startingX, startingY, orientation));
     }
 

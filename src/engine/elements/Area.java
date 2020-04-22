@@ -1,11 +1,14 @@
 package engine.elements;
 
 import engine.dto.Collision;
+import engine.dto.Event;
 import engine.dto.ObjectStarter;
 import engine.math.EntityDimensions;
 import javafx.animation.AnimationTimer;
-import javafx.scene.*;
-import javafx.scene.paint.Paint;
+import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,8 +17,11 @@ public abstract class Area extends Scene {
 
     ArrayList<Creature> creatures;
     ArrayList<Object> objects;
+    ArrayList<StyleNode> styleNodes;
     ArrayList<Collision> collisions;
     public Group entityGroup;
+
+    public ArrayList<Event> events;
 
 
     public Area(Parent root) {
@@ -28,31 +34,13 @@ public abstract class Area extends Scene {
         init();
     }
 
-    public Area(Parent root, Paint fill) {
-        super(root, fill);
-        init();
-    }
-
-    public Area(Parent root, double width, double height, Paint fill) {
-        super(root, width, height, fill);
-        init();
-    }
-
-    public Area(Parent root, double width, double height, boolean depthBuffer) {
-        super(root, width, height, depthBuffer);
-        init();
-    }
-
-    public Area(Parent root, double width, double height, boolean depthBuffer, SceneAntialiasing antiAliasing) {
-        super(root, width, height, depthBuffer, antiAliasing);
-        init();
-    }
-
     public void init() {
         entityGroup = new Group();
         creatures = getCreatures();
         objects = getObjects();
+        styleNodes = getStyleNodes();
         collisions = new ArrayList<>();
+        events = new ArrayList<>();
         keyEvents();
         AnimationTimer timer = new AnimationTimer() {
             @Override
@@ -60,7 +48,10 @@ public abstract class Area extends Scene {
 //                collisions.forEach(collision -> System.out.println(collision.getEntity1().name + " : " + collision.getEntity2().name));
                 checkLocations();
                 collisions.forEach(collision -> collision.getEntity1().collide(collision.getEntity2()));
+                creatures = getCreatures();
                 objects = getObjects();
+                styleNodes = getStyleNodes();
+                handleEvents();
                 deleteObjects();
             }
         };
@@ -87,6 +78,29 @@ public abstract class Area extends Scene {
             }
         }
         return objects;
+    }
+
+    private ArrayList<StyleNode> getStyleNodes() {
+        ArrayList<StyleNode> styleNodes = new ArrayList<>();
+        List<Node> nodes = getRoot().getChildrenUnmodifiable();
+        for (Node node : nodes) {
+            if (node instanceof StyleNode) {
+                styleNodes.add((StyleNode) node);
+            }
+        }
+        return styleNodes;
+    }
+
+    void handleEvents() {
+        objects.forEach(object -> {
+            object.handleEvents(events);
+        });
+        creatures.forEach(creature -> {
+            creature.handleEvents(events);
+        });
+        styleNodes.forEach(styleNode -> {
+            styleNode.handleEvents(events);
+        });
     }
 
     private void keyEvents() {

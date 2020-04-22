@@ -2,6 +2,9 @@ package app;
 
 import engine.elements.Creature;
 import engine.elements.CreatureAction;
+import engine.elements.Entity;
+import engine.elements.Object;
+import engine.enums.AttackingTarget;
 import javafx.scene.image.Image;
 
 public class Hero extends Creature {
@@ -16,6 +19,15 @@ public class Hero extends Creature {
 
     void drink() {
         doAction(drinking);
+    }
+
+    @Override
+    public void collide(Entity entity) {
+        if (entity instanceof Object) {
+            if (((Object) entity).damage > 0 && ((Object) entity).target == AttackingTarget.HERO) {
+                editHealth(-((Object) entity).damage);
+            }
+        }
     }
 
 }
