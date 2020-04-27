@@ -11,6 +11,7 @@ import java.util.ArrayList;
 public abstract class Entity extends ImageView {
 
     String name;
+    public Image image;
 
     public boolean moving;
     public boolean running;
@@ -23,6 +24,7 @@ public abstract class Entity extends ImageView {
 
     public Entity(String name, Image image) {
         this.name = name;
+        this.image = image;
         setImage(image);
         moving = true;
         orientation = EntityOrientation.RIGHT;

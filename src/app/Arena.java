@@ -26,8 +26,8 @@ public class Arena extends Area {
     ObjectStarter arrow;
     Image imageArrow;
 
-    ObjectStarter ball;
-    Image imageBall;
+    ObjectStarter fireball;
+    Image imageFireball;
 
     ImageView backgroundNode;
     Image backgroundImage;
@@ -53,7 +53,7 @@ public class Arena extends Area {
             imageZauberer = new Image( new FileInputStream("src/resources/gifs/wizard/idle/WizardIdleRight.gif"), 100, 100, false, false);
             imageGanon = new Image( new FileInputStream("src/resources/images/ganon.png"), 100, 100, true, false);
             imageArrow = new Image( new FileInputStream("src/resources/images/arrow.png"), 50, 20, true, false);
-            imageBall = new Image( new FileInputStream("src/resources/images/ball.jpg"), 50, 20, true, false);
+            imageFireball = new Image( new FileInputStream("src/resources/gifs/Fireball/FireballLoop.gif"), 100, 100, true, false);
             backgroundImage = new Image( new FileInputStream("src/resources/images/arena.png"), 1000, 600, false, false);
             healthImage = new Image( new FileInputStream("src/resources/images/HealthFlask/HealthFlask10.png"), 100, 100, false, false);
             manaImage = new Image( new FileInputStream("src/resources/images/ManaFlask/ManaFlask10.png"), 100, 100, false, false);
@@ -68,8 +68,8 @@ public class Arena extends Area {
         backgroundNode = new ImageView(backgroundImage);
 
         // ObjectStarter:
-        arrow = new ObjectStarter(new Object("Arrow", imageArrow, 1, 2, 2000, AttackingTarget.HERO), 100, 100, ObjectOrientation.RIGHT);
-        ball = new ObjectStarter(new Object("Ball", imageBall, 1, 2, 2000, AttackingTarget.ENEMY), 200, 200, ObjectOrientation.RIGHT);
+        arrow = new ObjectStarter(new Object("Arrow", imageArrow, 1, 2, 2000, AttackingTarget.HERO, ObjectOrientation.RIGHT), 100, 100, ObjectOrientation.RIGHT);
+        fireball = new ObjectStarter(new Object("Fireball", imageFireball, 1, 2, 2000, AttackingTarget.ENEMY, ObjectOrientation.RIGHT), 200, 200, ObjectOrientation.RIGHT);
 
         entityGroup.getChildren().add(hero);
         entityGroup.getChildren().add(enemy);
@@ -81,7 +81,7 @@ public class Arena extends Area {
         enemy.relocate(200, 200);
 
         createObject(arrow);
-        createObject(ball);
+        createObject(fireball);
     }
 
     @Override

@@ -23,7 +23,7 @@ public abstract class Creature extends Entity {
     int actionDuration;
 
     // shooting stuff:
-    Image imageBall;
+    Image imageFireball;
     boolean shooting;
     public long lastShot;
     public int shootingCooldown;
@@ -51,7 +51,7 @@ public abstract class Creature extends Entity {
         lastHealthUpdate = System.currentTimeMillis();
 
         try {
-            imageBall = new Image( new FileInputStream("src/resources/images/ball.jpg"), 50, 20, true, false);
+            imageFireball = new Image( new FileInputStream("src/resources/gifs/Fireball/FireballLoop.gif"), 100, 100, true, false);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -177,7 +177,7 @@ public abstract class Creature extends Entity {
         }
 
         System.out.println(target.name());
-        Object object = new Object("Ball", imageBall, 1, 3, 1000, target);
+        Object object = new Object("Fireball", imageFireball, 1, 2, 2000, target, orientation);
         startingX -= object.getBoundsInLocal().getWidth() / 2;
         startingY -= object.getBoundsInLocal().getHeight() / 2;
         createObjectInArena(new ObjectStarter(object, startingX, startingY, orientation));

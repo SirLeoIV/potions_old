@@ -5,6 +5,8 @@ import engine.enums.ObjectOrientation;
 import javafx.animation.AnimationTimer;
 import javafx.scene.image.Image;
 
+import java.io.FileInputStream;
+
 public class Object extends Entity {
 
     public int damage;
@@ -12,6 +14,10 @@ public class Object extends Entity {
     long birthTime;
     int lifeTime;
     public AttackingTarget target;
+    ObjectOrientation orientation;
+
+    Animation startingAnimation;
+    Animation endingAnimation;
 
     public Object(Object object) {
         super(object.name, object.getImage());
@@ -19,45 +25,88 @@ public class Object extends Entity {
         speed = object.speed;
         lifeTime = object.lifeTime;
         target = object.target;
+        startingAnimation = object.startingAnimation;
+        endingAnimation = object.endingAnimation;
+        orientation = object.orientation;
 
         initObject();
     }
 
-    public Object(String name, Image image, int damage, int speed, int lifeTime, AttackingTarget target) {
+    public Object(String name, Image image, int damage, int speed, int lifeTime, AttackingTarget target, ObjectOrientation orientation) {
         super(name, image);
         this.damage = damage;
         this.speed = speed;
         this.lifeTime = lifeTime;
         this.target = target;
+        this.orientation = orientation;
 
         initObject();
     }
 
     private void initObject() {
         birthTime = System.currentTimeMillis();
+        try {
+            String path = "src/resources/gifs/" + name + "/" + name + "Loop.gif";
+            image = new Image( new FileInputStream(path), 100, 100, true, false);
+        } catch (Exception e) {
+            startingAnimation = null;
+        }
+        try {
+            String animationName = "Init";
+            startingAnimation = new Animation(name, animationName, 700, 100, 100);
+        } catch (Exception e) {
+            startingAnimation = null;
+        }
+        try {
+            String animationName = "Ending";
+            endingAnimation = new Animation(name, animationName, 900, 100, 100);
+        } catch (Exception e) {
+            endingAnimation = null;
+        }
+        if (orientation == ObjectOrientation.UP) setRotate(-90);
+        else if (orientation == ObjectOrientation.DOWN) setRotate(90);
+        else if (orientation == ObjectOrientation.LEFT) setScaleX(-1);
+        else if (orientation == ObjectOrientation.RIGHT) setScaleX(1);
+        else if (orientation == ObjectOrientation.UP_LEFT) setRotate(-135);
+        else if (orientation == ObjectOrientation.UP_RIGHT) setRotate(-45);
+        else if (orientation == ObjectOrientation.DOWN_LEFT) setRotate(135);
+        else if (orientation == ObjectOrientation.DOWN_RIGHT) setRotate(45);
     }
 
     public void startMoving(ObjectOrientation orientation) {
-        int x = 0;
-        int y = 0;
-        if (orientation == ObjectOrientation.LEFT) x -= speed * 3;
-        else if (orientation == ObjectOrientation.RIGHT) x += speed * 3;
-        else if (orientation == ObjectOrientation.UP) y -= speed * 3;
-        else if (orientation == ObjectOrientation.DOWN) y += speed * 3;
-        else if (orientation == ObjectOrientation.UP_LEFT) { x -= speed * 2; y -= speed * 2; }
-        else if (orientation == ObjectOrientation.UP_RIGHT) { x += speed * 2; y -= speed * 2; }
-        else if (orientation == ObjectOrientation.DOWN_LEFT) { x -= speed * 2; y += speed * 2; }
-        else if (orientation == ObjectOrientation.DOWN_RIGHT) { x += speed * 2; y += speed * 2; }
 
-        int finalX = x;
-        int finalY = y;
+        int x = orientation.x * speed;
+        int y = orientation.y * speed;
+
+        int startingDuration = 0;
+        if (startingAnimation != null) {
+            setImage(startingAnimation.animation);
+            startingDuration = startingAnimation.duration;
+        }
+        int finalStartingDuration = startingDuration;
+
+        int endingDuration = 0;
+        if (endingAnimation != null) {
+            endingDuration = endingAnimation.duration;
+        }
+        int finalEndingDuration = endingDuration;
 
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                // if statement to avoid null-pointer
+                // first if statement to avoid null-pointer
                 if (birthTime + lifeTime > System.currentTimeMillis()) {
-                    moveBy(finalX, finalY);
+                    // only do stuff if starting animation has finished
+                    if (birthTime + finalStartingDuration < System.currentTimeMillis()) {
+                        setImage(image);
+                        // check if ending animation should be played
+                        if (birthTime + lifeTime - finalEndingDuration > System.currentTimeMillis()
+                                && finalEndingDuration != 0) {
+                            setImage(endingAnimation.animation);
+                        } else {
+                            moveBy(x, y);
+                        }
+                    }
                 }
             }
         };
