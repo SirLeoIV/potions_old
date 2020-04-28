@@ -14,7 +14,7 @@ public class Hero extends Creature {
 
     public Hero(String name, Image image, int health) {
         super(name, image, health);
-        drinking = new CreatureAction(name, "Action", 100, 100, 2000, image);
+        drinking = new CreatureAction(name, "Drinking", 100, 100, 2000, image);
     }
 
     void drink() {

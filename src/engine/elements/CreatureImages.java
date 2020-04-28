@@ -13,7 +13,6 @@ public class CreatureImages {
     final String waiting = "Waiting";
     final String walking = "Walking";
     final String running = "Running";
-    final String action = "Action";
 
     final String right = "Right";
     final String left = "Left";
@@ -49,11 +48,6 @@ public class CreatureImages {
     Image running_up;
     Image running_down;
 
-    Image action_right;
-    Image action_left;
-    Image action_up;
-    Image action_down;
-
     public CreatureImages(String name, int width, int height, Image baseImage) {
         this.name = name;
         this.width = width;
@@ -83,11 +77,6 @@ public class CreatureImages {
         running_left = getImage(path + running + namePrefix + running + left + gif);
         running_up = getImage(path + running + namePrefix + running + up + gif);
         running_down = getImage(path + running + namePrefix + running + down + gif);
-
-        action_right = getImage(path + action + namePrefix + action + right + gif);
-        action_left = getImage(path + action + namePrefix + action + left + gif);
-        action_up = getImage(path + action + namePrefix + action + up + gif);
-        action_down = getImage(path + action + namePrefix + action + down + gif);
     }
 
     private Image getImage(String path) {
@@ -98,7 +87,6 @@ public class CreatureImages {
                 path = path.replace(waiting, standing);
                 path = path.replace(walking, standing);
                 path = path.replace(running, standing);
-                path = path.replace(action, standing);
                 return new Image(new FileInputStream(path), width, height, false, false);
             } catch (Exception e2) {
                 return baseImage;
@@ -132,12 +120,6 @@ public class CreatureImages {
             else if (orientation == EntityOrientation.RIGHT) result = running_right;
             else if (orientation == EntityOrientation.UP) result = running_up;
             else if (orientation == EntityOrientation.DOWN) result = running_down;
-        }
-        else if (state == CreatureState.ACTION) {
-            if (orientation == EntityOrientation.LEFT) result = action_left;
-            else if (orientation == EntityOrientation.RIGHT) result = action_right;
-            else if (orientation == EntityOrientation.UP) result = action_up;
-            else if (orientation == EntityOrientation.DOWN) result = action_down;
         }
         currentImageStateOrientation = new CreatureImageStateOrientation(result, state, orientation);
         return result;

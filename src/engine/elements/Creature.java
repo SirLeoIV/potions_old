@@ -181,6 +181,7 @@ public abstract class Creature extends Entity {
         startingX -= object.getBoundsInLocal().getWidth() / 2;
         startingY -= object.getBoundsInLocal().getHeight() / 2;
         createObjectInArena(new ObjectStarter(object, startingX, startingY, orientation));
+        doAction(new CreatureAction(name, "Talking", 100, 100, 700, image));
     }
 
     void createObjectInArena(ObjectStarter starter) {
