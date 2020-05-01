@@ -63,7 +63,7 @@ public class Arena extends Area {
 
         healthBar = new ProgressElement("HealthFlask", healthImage, 20, 480, 100, 100, true, 11);
         manaBar = new ProgressElement("ManaFlask", manaImage, 100, 480, 100, 100, true, 11);
-        hero = new Hero("Wizard", imageZauberer, 10);
+        hero = new Hero("Wizard", imageZauberer, 10, 10);
         enemy = new Enemy("Enemy", imageGanon, 10);
         backgroundNode = new ImageView(backgroundImage);
 
@@ -144,14 +144,14 @@ public class Arena extends Area {
     @Override
     public void keyEventK(boolean input) {
         if (input) {
-            manaBar.increase();
+            hero.editMana(1);
         }
     }
 
     @Override
     public void keyEventJ(boolean input) {
         if (input) {
-            manaBar.decrease();
+            hero.editMana(-1);
         }
     }
 

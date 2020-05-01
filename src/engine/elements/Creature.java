@@ -15,6 +15,7 @@ import java.io.FileNotFoundException;
 public abstract class Creature extends Entity {
 
     int health;
+    int maxHealth;
     long lastHealthUpdate;
     double healthUpdateCooldown;
 
@@ -34,6 +35,7 @@ public abstract class Creature extends Entity {
     public Creature(String name, Image image, int health) {
         super(name, image);
         this.health = health;
+        this.maxHealth = health;
         this.healthUpdateCooldown = 1;
         initCreature(image);
     }
@@ -41,6 +43,7 @@ public abstract class Creature extends Entity {
     public Creature(String name, Image image, int health, double healthUpdateCooldown) {
         super(name, image);
         this.health = health;
+        this.maxHealth = health;
         this.healthUpdateCooldown = healthUpdateCooldown;
         initCreature(image);
     }
@@ -101,7 +104,9 @@ public abstract class Creature extends Entity {
         long lastUpdatePlusCooldown = lastHealthUpdate + (int) healthUpdateCooldown * 1000;
         long currentTime = System.currentTimeMillis();
 
-        if (currentTime >= lastUpdatePlusCooldown) {
+        if (currentTime >= lastUpdatePlusCooldown
+                && health + delta >= 0
+                && health + delta <= maxHealth) {
             health += delta;
             lastHealthUpdate = currentTime;
             System.out.println(health);
@@ -139,7 +144,8 @@ public abstract class Creature extends Entity {
     }
 
     public void shoot() {
-        if (lastShot + shootingCooldown > System.currentTimeMillis()) return;
+        if (!canShoot()) return;
+        doShootingActions();
         lastShot = System.currentTimeMillis();
 
         int startingX = (int) (getBoundsInParent().getMinX() + getBoundsInParent().getMaxX()) / 2;
@@ -182,6 +188,12 @@ public abstract class Creature extends Entity {
         startingY -= object.getBoundsInLocal().getHeight() / 2;
         createObjectInArena(new ObjectStarter(object, startingX, startingY, orientation));
         doAction(new CreatureAction(name, "Talking", 100, 100, 700, image));
+    }
+
+    public void doShootingActions() {}
+
+    public boolean canShoot() {
+        return lastShot + shootingCooldown > System.currentTimeMillis();
     }
 
     void createObjectInArena(ObjectStarter starter) {
