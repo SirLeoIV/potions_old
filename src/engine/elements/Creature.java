@@ -219,27 +219,19 @@ public abstract class Creature extends Entity {
     }
 
     public void moveLeft(boolean input) {
-        if (!inAction || !input) {
-            setMoveLeft(input);
-        }
+        setMoveLeft(input);
     }
 
     public void moveRight(boolean input) {
-        if (!inAction || !input) {
-            setMoveRight(input);
-        }
+        setMoveRight(input);
     }
 
     public void moveUp(boolean input) {
-        if (!inAction || !input) {
-            setMoveUp(input);
-        }
+        setMoveUp(input);
     }
 
     public void moveDown(boolean input) {
-        if (!inAction || !input) {
-            setMoveDown(input);
-        }
+        setMoveDown(input);
     }
 
     public boolean isShooting() {
